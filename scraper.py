@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -45,20 +46,20 @@ def scrape_karkidi_jobs(keyword="data science", pages=2):
                 })
 
     df = pd.DataFrame(L).dropna(subset=["Title", "Skills"])
-    
+
     # TF-IDF Vectorization
     tfidf = TfidfVectorizer()
     tfidf_matrix = tfidf.fit_transform(df["Skills"])
-    joblib.dump(tfidf, "tfidf_vectorizer.pkl")
+    joblib.dump(tfidf, os.path.join(os.getcwd(), "tfidf_vectorizer.pkl"))
 
     # KMeans Clustering
-    NUM_CLUSTERS = 5  # you can increase this for more granularity
+    NUM_CLUSTERS = 5
     kmeans = KMeans(n_clusters=NUM_CLUSTERS, random_state=42, n_init=10)
     df["Cluster"] = kmeans.fit_predict(tfidf_matrix)
-    joblib.dump(kmeans, "kmeans_model.pkl")
+    joblib.dump(kmeans, os.path.join(os.getcwd(), "kmeans_model.pkl"))
 
     # Save final job list with clusters
-    df.to_csv("karkidi_jobs.csv", index=False, encoding="utf-8")
+    df.to_csv(os.path.join(os.getcwd(), "karkidi_jobs.csv"), index=False, encoding="utf-8")
     print(f"Scraped and clustered {len(df)} jobs into {NUM_CLUSTERS} clusters.")
     return df
 

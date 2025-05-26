@@ -1,2 +1,22 @@
-venv/
+# Python cache files
 __pycache__/
+*.py[cod]
+
+# Virtual environment folder
+venv/
+
+# Serialized model files
+*.pkl
+
+# CSV data files
+karkidi_jobs.csv
+subscribers.csv
+
+# Environment variables file (if you add any)
+.env
+
+# OS generated files
+.DS_Store
+
+# IDE folders (optional)
+.vscode/
